@@ -6,6 +6,7 @@
 ## Skill
   - Java (JDK 8 1.8u_221 for Apple M1)
   - STS Version 5(Spring Tool Suite 3.9.11 for Apple M1)
+  - Tomcat 9.0.84 for Mac
   - MySQL 8.0.19 for Apple M1
 ## 과정
 ### 1주차 : 개발환경 세팅
