@@ -20,7 +20,7 @@
 ## 3) Tomcat 9 설치
   - brew를 통해 설치
   - ```brew search tomcat```로 설치 가능한 tomcat 버전 찾기
-  - ```brew install tomcat```로 최신버전, ```brew install tomcat@9``` tomcat@~로 원하느 버전 설치
+  - ```brew install tomcat```로 최신버전, ```brew install tomcat@9``` tomcat@~로 원하는 버전 설치
   
     ![image](https://github.com/pupba/Bootcamp/assets/53106728/62109132-1691-4c55-9018-f14d64ce387b)
 
