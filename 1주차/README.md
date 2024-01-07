@@ -12,7 +12,11 @@
   - https://github.com/spring-attic/toolsuite-distribution/wiki/Spring-Tool-Suite-3 에서 OS에 맞는 것을 찾아서 설치.
     
     ![image](https://github.com/pupba/Bootcamp/assets/53106728/2372d7d3-c6da-4df4-9285-ac23a4f344af)
+  - STS3로 JDK1.8에서 프로젝트를 만들때 이상하게 다음과 같은 오류<br>
+    ```An error has occurred. See error log for more details.java.lang.ExceptionInInitializerError```<br>
+    가 뜰 수 있다. 이는 STS의 문제로 STS.ini 파일을 수정해줘야 한다.
 
+     
 ## 3) Tomcat 9 설치
   - brew를 통해 설치
   - ```brew search tomcat```로 설치 가능한 tomcat 버전 찾기
@@ -24,10 +28,121 @@
 
     ![image](https://github.com/pupba/Bootcamp/assets/53106728/2ae025f8-ccb4-4250-8a8d-252e906ab8a6)
     
-## 4) MySQL, mybatis 설치
-  - MySQL 설치 및 WorkBench 테스트
+## 4) Mariadb, mybatis, DAO, Service, VO 
+  - Mariadb 설치 및 WorkBench 테스트
+    * Mac에서 brew를 통한 MariaDB 설치 후 접속 계정 생성 
     
     ![image](https://github.com/pupba/Bootcamp/assets/53106728/94350af6-f231-43c3-a2b6-83129501788b)
 
   - mybatis 설치
-  - 
+    * https://level-rosehip-002.notion.site/1-6-Mariadb-MyBatis-c502f792d334424894772947df61e122 페이지 참고
+  - pom.xml을 수정하면 해야하는 내용 --> https://hijjang2.tistory.com/658 (이 과정을 해줘야 maven 의존성이 추가됨.)
+  - DAO, Service, VO 파일 작성
+
+    * DAO
+      ```
+      // MovieDAO.java 선언부(인터페이스)
+      package com.comento.dao;
+      import java.util.List;
+      import com.comento.vo.MovieVO;
+      
+      public interface MovieDAO {
+      	public List<MovieVO> selectMovie() throws Exception;
+      }
+      
+      // MovieDAOImpl.java 구현부
+      package com.comento.dao;
+      import java.util.List;
+      import javax.inject.Inject;
+      import org.apache.ibatis.session.SqlSession;
+      import org.springframework.stereotype.Repository;
+      
+      import com.comento.vo.MovieVO;
+      
+      @Repository
+      public class MovieDAOImpl implements MovieDAO{
+          @Inject
+          private SqlSession sqlSession;
+          private static final String Namespace = "com.comento.mybatis.sql.test";
+    
+          @Override
+          public List<MovieVO> selectMovie() throws Exception {
+       
+              return sqlSession.selectList(Namespace+".selectMovie");
+          }
+ 
+      }
+      ```
+    * Service
+      ```
+      // MovieService.java 선언부(인터페이스)
+      package com.comento.service;
+      import java.util.List;
+      import com.comento.vo.MovieVO;
+       
+      public interface MovieService {
+          public List<MovieVO> selectMovie() throws Exception;
+      }
+      
+      // MovieServiceImpl.java 구현부
+      package com.comento.service;
+      import java.util.List;
+      import javax.inject.Inject;
+      import org.springframework.stereotype.Service;
+       
+      import com.comento.dao.MovieDAO;
+      import com.comento.vo.MovieVO;
+       
+      @Service
+      public class MovieServiceImpl implements MovieService {
+       
+          @Inject
+          private MovieDAO dao;
+          
+          @Override
+          public List<MovieVO> selectMovie() throws Exception {
+       
+              return dao.selectMovie();
+          }
+       
+      }
+      ```
+    * VO
+      ```
+      package com.comento.vo;
+      
+      public class MovieVO {
+      	private int movie_id;
+      	private String movie_name;
+      	private String director;
+      	private String types;
+      	// private String moviecol;
+      	public int getMovie_id() {
+      		return movie_id;
+      	}
+      	public void setMovie_id(int movie_id) {
+      		this.movie_id = movie_id;
+      	}
+      	public String getMovie_name() {
+      		return movie_name;
+      	}
+      	public void setMovie_name(String movie_name) {
+      		this.movie_name = movie_name;
+      	}
+      	public String getDirector() {
+      		return director;
+      	}
+      	public void setDirector(String director) {
+      		this.director = director;
+      	}
+      	public String getTypes() {
+      		return types;
+      	}
+      	public void setTypes(String types) {
+      		this.types = types;
+      	}
+      	
+      }
+      ```
+## 5) jsp를 사용하여 확인
+![image](https://github.com/pupba/Bootcamp/assets/53106728/02fe1b32-4839-4587-b7b6-b8135de0ba71)
