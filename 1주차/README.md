@@ -35,7 +35,9 @@
     ![image](https://github.com/pupba/Bootcamp/assets/53106728/94350af6-f231-43c3-a2b6-83129501788b)
 
   - mybatis 설치
-    * https://level-rosehip-002.notion.site/1-6-Mariadb-MyBatis-c502f792d334424894772947df61e122 페이지 참고
+    * mybatis plug-in 1.2.5 버전 부터는 STS 3.9.X를 망가 뜨린다. 다음 링크를 참고하여 직접 넣기.
+      -> https://e-7-e.tistory.com/67  
+    * 앞에 과정 후 수행 -> https://level-rosehip-002.notion.site/1-6-Mariadb-MyBatis-c502f792d334424894772947df61e122
   - pom.xml을 수정하면 해야하는 내용 --> https://hijjang2.tistory.com/658 (이 과정을 해줘야 maven 의존성이 추가됨.)
   - DAO, Service, VO 파일 작성
 
