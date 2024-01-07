@@ -147,4 +147,4 @@
       }
       ```
 ## 5) jsp를 사용하여 확인
-![image](https://github.com/pupba/Bootcamp/assets/53106728/02fe1b32-4839-4587-b7b6-b8135de0ba71)
+![image](https://github.com/pupba/Bootcamp/assets/53106728/c33744a3-9143-4eeb-93cf-d73c93c6ffa4)
