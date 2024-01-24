@@ -183,10 +183,10 @@ public class webappTest {
 </html>
 ```
 
-**경로**
+**경로**<br>
 ![Alt text](./imgs/image.png)
 
-**실행 화면(프로젝트를 spring boot app으로 실행)**
+**실행 화면(프로젝트를 spring boot app으로 실행)**<br>
 ![Alt text](./imgs/image-1.png)
 
 ### 2. SW활용현황 API의 하나인 20년도 총 로그인 수 API 개발(가이드 제공)
@@ -224,88 +224,96 @@ VALUES(1, 'L', 'AAA', '2008180520'), #20년 8월 18일 5시 20분
 
 #### API 작성
 
-1. mybatis 설정
-
+1.  mybatis 설정
+    <br>
     ![Alt text](./imgs/image-2.png)
+    <br>
 
-    ```java
+    ````java
     package com.pupba.webapp.config;
 
-    import javax.sql.DataSource;
+        import javax.sql.DataSource;
 
-    import org.apache.ibatis.session.SqlSessionFactory;
-    import org.mybatis.spring.SqlSessionFactoryBean;
-    import org.mybatis.spring.SqlSessionTemplate;
-    import org.mybatis.spring.annotation.MapperScan;
-    import org.springframework.context.annotation.Bean;
-    import org.springframework.context.annotation.Configuration;
+        import org.apache.ibatis.session.SqlSessionFactory;
+        import org.mybatis.spring.SqlSessionFactoryBean;
+        import org.mybatis.spring.SqlSessionTemplate;
+        import org.mybatis.spring.annotation.MapperScan;
+        import org.springframework.context.annotation.Bean;
+        import org.springframework.context.annotation.Configuration;
 
-    @Configuration
-    @MapperScan(basePackages = "com.pupba.webapp.dao")
-    public class MybatisConfig {
+        @Configuration
+        @MapperScan(basePackages = "com.pupba.webapp.dao")
+        public class MybatisConfig {
 
-        @Bean
-        public SqlSessionFactory sqlSessionFactory (DataSource dataSource) throws Exception {
-            SqlSessionFactoryBean sqlSessionFactory = new SqlSessionFactoryBean();
+            @Bean
+            public SqlSessionFactory sqlSessionFactory (DataSource dataSource) throws Exception {
+                SqlSessionFactoryBean sqlSessionFactory = new SqlSessionFactoryBean();
 
-            sqlSessionFactory.setDataSource(dataSource);
-            sqlSessionFactory.setTypeAliasesPackage("com.pupba.webapp.dto");
+                sqlSessionFactory.setDataSource(dataSource);
+                sqlSessionFactory.setTypeAliasesPackage("com.pupba.webapp.dto");
 
-            return sqlSessionFactory.getObject();
+                return sqlSessionFactory.getObject();
+            }
+
+            @Bean
+            public SqlSessionTemplate sqlSession (SqlSessionFactory sqlSessionFactory) {
+
+                return new SqlSessionTemplate(sqlSessionFactory);
+            }
+
         }
+        ```
 
-        @Bean
-        public SqlSessionTemplate sqlSession (SqlSessionFactory sqlSessionFactory) {
+    ````
 
-            return new SqlSessionTemplate(sqlSessionFactory);
-        }
-
-    }
-    ```
-
-2. maaper 작성
+2.  maaper 작성
 
 -   db와 mybatis를 활용하기 위한 코드 작성
 -   MapperScan 어노테이션을 활용하여 스캔할 패키지를 입력
+    <br>
     ![Alt text](./imgs/image-3.png)
+    <br><br>
     2.1. StatisticMapper.java
 
-        ```java
-        package com.pupba.webapp.dao;
+            ```java
+            package com.pupba.webapp.dao;
 
-        import java.util.HashMap;
+            import java.util.HashMap;
 
-        import com.pupba.webapp.dto.StatisticDto;
+            import com.pupba.webapp.dto.StatisticDto;
 
-        public interface  StatisticMapper {
-            public HashMap<String, Object> selectYearLogin(String year);
+            public interface  StatisticMapper {
+                public HashMap<String, Object> selectYearLogin(String year);
 
-        }
-        ```
+            }
+            ```
 
-        2.2. statisticMapper.xml
+            2.2. statisticMapper.xml
 
-        -   `<select>` 안에 쿼리 작성
+            -   `<select>` 안에 쿼리 작성
 
-        ```xml
-            <?xml version="1.0" encoding="UTF-8"?>
-        <!DOCTYPE mapper
-            PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-            "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+            ```xml
+                <?xml version="1.0" encoding="UTF-8"?>
+            <!DOCTYPE mapper
+                PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+                "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-        <mapper namespace="com.pupba.webapp.dao.StatisticMapper">
+            <mapper namespace="com.pupba.webapp.dao.StatisticMapper">
 
-            <select id="selectYearLogin" parameterType="string" resultType="hashMap">
-                select count(*) as totCnt
-                from statistc.requestinfo ri
-                where left(ri.createDate, 2) = #{year};
-            </select>
+                <select id="selectYearLogin" parameterType="string" resultType="hashMap">
+                    select count(*) as totCnt
+                    from statistc.requestinfo ri
+                    where left(ri.createDate, 2) = #{year};
+                </select>
 
-        </mapper>
-        ```
+            </mapper>
+            ```
 
 3.  Service 작성(비즈니스 로직 작성)
+    <br>
     ![Alt text](./imgs/image-4.png)
+    <br>
+    <br>
     3.1. StatisticService.java
 
     ```java
@@ -357,59 +365,61 @@ VALUES(1, 'L', 'AAA', '2008180520'), #20년 8월 18일 5시 20분
     ```
 
 4.  Setting 코드 수정
+    <br>
     ![Alt text](./imgs/image-5.png)
+    <br>
+    <br>
+    ```java
+    package com.pupba.webapp.test;
 
-        ```java
-        package com.pupba.webapp.test;
+                import java.util.ArrayList;
+                import java.util.HashMap;
+                import java.util.List;
+                import java.util.Map;
 
-        import java.util.ArrayList;
-        import java.util.HashMap;
-        import java.util.List;
-        import java.util.Map;
+                import org.springframework.beans.factory.annotation.Autowired;
+                import org.springframework.stereotype.Controller;
+                import org.springframework.web.bind.annotation.RequestMapping;
+                import org.springframework.web.bind.annotation.ResponseBody;
+                import org.springframework.web.servlet.ModelAndView;
 
-        import org.springframework.beans.factory.annotation.Autowired;
-        import org.springframework.stereotype.Controller;
-        import org.springframework.web.bind.annotation.RequestMapping;
-        import org.springframework.web.bind.annotation.ResponseBody;
-        import org.springframework.web.servlet.ModelAndView;
-
-        import com.pupba.webapp.dao.StatisticMapper;
-        import com.pupba.webapp.service.StatisticService;
-
-
-
-        @Controller
-        public class webappTest {
+                import com.pupba.webapp.dao.StatisticMapper;
+                import com.pupba.webapp.service.StatisticService;
 
 
-            @Autowired
-            private StatisticService service;
 
-            @ResponseBody
-            @RequestMapping("/sqlyear-statistic")
-            public Map<String, Object> sqltest(String year) throws Exception{
-                // 임의로 GET을 통해 url에 parameter를 입력하여 결과를 요청
-                return service.yearloginNum(year);
-            }
+                @Controller
+                public class webappTest {
 
-            @RequestMapping("/test")
-            public ModelAndView test() throws Exception{
-                ModelAndView mav = new ModelAndView("test");
-                mav.addObject("name", "devfunpj");
-                List<String> resultList = new ArrayList<String>();
-                resultList.add("!!!HELLO WORLD!!!");
-                resultList.add("설정 TEST!!!");
-                resultList.add("설정 TEST!!!");
-                resultList.add("설정 TEST!!!!!");
-                resultList.add("설정 TEST!!!!!!");
-                mav.addObject("list", resultList);
-                return mav;
-            }
 
-        }
-        ```
+                    @Autowired
+                    private StatisticService service;
 
-    ![Alt text](./imgs/image-6.png)
+                    @ResponseBody
+                    @RequestMapping("/sqlyear-statistic")
+                    public Map<String, Object> sqltest(String year) throws Exception{
+                        // 임의로 GET을 통해 url에 parameter를 입력하여 결과를 요청
+                        return service.yearloginNum(year);
+                    }
+
+                    @RequestMapping("/test")
+                    public ModelAndView test() throws Exception{
+                        ModelAndView mav = new ModelAndView("test");
+                        mav.addObject("name", "devfunpj");
+                        List<String> resultList = new ArrayList<String>();
+                        resultList.add("!!!HELLO WORLD!!!");
+                        resultList.add("설정 TEST!!!");
+                        resultList.add("설정 TEST!!!");
+                        resultList.add("설정 TEST!!!!!");
+                        resultList.add("설정 TEST!!!!!!");
+                        mav.addObject("list", resultList);
+                        return mav;
+                    }
+
+                }
+                ```
+
+            ![Alt text](./imgs/image-6.png)
 
 ---
 
