@@ -275,39 +275,39 @@ VALUES(1, 'L', 'AAA', '2008180520'), #20년 8월 18일 5시 20분
     <br><br>
     2.1. StatisticMapper.java
 
-            ```java
-            package com.pupba.webapp.dao;
+    ```java
+    package com.pupba.webapp.dao;
 
-            import java.util.HashMap;
+    import java.util.HashMap;
 
-            import com.pupba.webapp.dto.StatisticDto;
+    import com.pupba.webapp.dto.StatisticDto;
 
-            public interface  StatisticMapper {
-                public HashMap<String, Object> selectYearLogin(String year);
+    public interface  StatisticMapper {
+        public HashMap<String, Object> selectYearLogin(String year);
 
-            }
-            ```
+    }
+    ```
 
-            2.2. statisticMapper.xml
+    2.2. statisticMapper.xml
 
-            -   `<select>` 안에 쿼리 작성
+    -   `<select>` 안에 쿼리 작성
 
-            ```xml
-                <?xml version="1.0" encoding="UTF-8"?>
-            <!DOCTYPE mapper
-                PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-                "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    ```xml
+        <?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-            <mapper namespace="com.pupba.webapp.dao.StatisticMapper">
+    <mapper namespace="com.pupba.webapp.dao.StatisticMapper">
 
-                <select id="selectYearLogin" parameterType="string" resultType="hashMap">
-                    select count(*) as totCnt
-                    from statistc.requestinfo ri
-                    where left(ri.createDate, 2) = #{year};
-                </select>
+        <select id="selectYearLogin" parameterType="string" resultType="hashMap">
+            select count(*) as totCnt
+            from statistc.requestinfo ri
+            where left(ri.createDate, 2) = #{year};
+        </select>
 
-            </mapper>
-            ```
+    </mapper>
+    ```
 
 3.  Service 작성(비즈니스 로직 작성)
     <br>
@@ -369,6 +369,7 @@ VALUES(1, 'L', 'AAA', '2008180520'), #20년 8월 18일 5시 20분
     ![Alt text](./imgs/image-5.png)
     <br>
     <br>
+
     ```java
     package com.pupba.webapp.test;
 
@@ -417,9 +418,9 @@ VALUES(1, 'L', 'AAA', '2008180520'), #20년 8월 18일 5시 20분
                     }
 
                 }
-                ```
+    ```
 
-            ![Alt text](./imgs/image-6.png)
+![Alt text](./imgs/image-6.png)
 
 ---
 

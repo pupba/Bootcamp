@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+	
+    <mapper namespace="com.apis.login_analysis.dao.StatisticMapper">
+	<!-- 1. 월별 접속자 수 -->
+        <select id="MonthVisit" resultType="hashMap">
+            SELECT YEAR(login_date) AS year, MONTH(login_date) AS month, COUNT(user_id) AS monthly_visitors
+			FROM login_table
+			GROUP BY YEAR(login_date), MONTH(login_date)
+			ORDER BY YEAR(login_date), MONTH(login_date);
+        </select>
+	<!-- 2. 일자별 접속자 수 -->
+		<select id="DayVisit" resultType="hashMap">
+			SELECT login_date, COUNT(user_id) AS daily_visitors
+			FROM login_table
+			GROUP BY login_date;
+		</select>
+	<!-- 3. 평균 하루 로그인 수 -->
+		<select id="AvgDailyLogin" resultType="hashMap">
+			SELECT YEAR(login_date) as year, FLOOR(AVG(daily_visitors)) AS average_daily_logins
+			FROM (
+			    SELECT login_date, COUNT(user_id) AS daily_visitors
+			    FROM login_table
+			    GROUP BY login_date
+			) AS daily_stats
+			GROUP BY year;
+		</select>
+	<!-- 4. 휴일을 제외한 로그인 수 -->
+		<select id="WeekdayLogin" resultType="hashMap">
+			SELECT login_date as date,COUNT(user_id) AS weekday_login
+			FROM login_table
+			WHERE login_date not in (SELECT holiday_date FROM holiday_table)
+			GROUP BY login_date;
+		</select>
+	<!-- 5. 부서별 월별 로그 -->
+		<select id="DepartMonthLog" resultType="hashMap">
+			SELECT department, YEAR(login_date) as year,MONTH(login_date) AS month, COUNT(user_id) AS department_monthly_logins
+			FROM login_table
+			GROUP BY department, YEAR(login_date),MONTH(login_date);
+		</select>
+    </mapper>
